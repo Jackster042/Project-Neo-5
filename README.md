@@ -126,7 +126,7 @@ The goal of **Project NEO 5** is to build a scalable and user-friendly e-commerc
 
 ---
 
-# Project NEO 5 - Development Environment Setup
+# Development Environment Setup
 
 This document outlines the steps taken to set up the development environment for **Project NEO 5**, an e-commerce website built with React.js (frontend), Node.js with Express (backend), and MongoDB (database). The project follows a **monorepo structure** and uses modern tools like **Vite**, **TailwindCSS**, and **TypeScript**.
 
@@ -166,13 +166,13 @@ Run projects **separately** on different ports for **FRONTEND** and **BACKEND**
 
 ---
 
-# Project NEO 5 - Design the UI/UX
+# Design the UI/UX
 
 ### **Contact**
 
 For questions or further details, please contact:  
-[Your Name]  
-[Your Email]  
+Jackster042  
+feemail042@gmail.com  
 [Your GitHub Profile]
 
 ---
