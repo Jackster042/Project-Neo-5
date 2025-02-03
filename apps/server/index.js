@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/", (req, res) => res.send("Hello Project NEO 5"));
 
 // 404 HANDLER
-app.use((req, res, next) => {
+app.use("*", (req, res) => {
   return res.status(400).json({ message: "Page not found" });
 });
 
