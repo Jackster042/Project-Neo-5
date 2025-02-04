@@ -181,6 +181,9 @@ MongoDB connected with schemas and CRUD operations.
 **Authentication**:
 
 JWT-based authentication with protected routes.
+Rate Limiting
+Refresh Token
+Role-Based Access Control (RBAC)
 
 **Payment Integration**:
 
