@@ -1,6 +1,10 @@
 const sendErrorDev = (err, res, req, next) => {
-  console.log(err, "error");
-  res.status(err.StatusCode).json({
+  console.log(err, "error from ErrorController");
+  // console.log(err.status, "err.status");
+  // console.log(err.message, "err.message");
+  // console.log(err.stack, "err.stack");
+
+  res.status(err.statusCode).json({
     err: err,
     status: err.status,
     message: err.message,
@@ -10,12 +14,12 @@ const sendErrorDev = (err, res, req, next) => {
 
 const sendErrorProd = (err, req, res, next) => {
   if (err.isOperational) {
-    res.status(err.StatusCode).json({
+    res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
   } else {
-    res.status(err.StatusCode).json({
+    res.status(err.statusCode).json({
       status: "error",
       message: "Internal Server Error!",
     });
@@ -23,7 +27,7 @@ const sendErrorProd = (err, req, res, next) => {
 };
 
 module.exports = (err, req, res, next) => {
-  err.StatusCode = err.StatusCode || 500;
+  err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
   if ((process.env.NODE_ENV = "development")) {

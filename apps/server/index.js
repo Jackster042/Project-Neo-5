@@ -3,8 +3,14 @@ const cors = require("cors");
 const logger = require("morgan");
 const path = require("path");
 
-const userRoutes = require("./routes/userRoutes.js");
 // UTILS
+const AppError = require("./utils/AppError.js");
+
+// ROUTES IMPORTS
+const userRoutes = require("./routes/userRoutes.js");
+const productRoutes = require("./routes/productRoutes.js");
+
+// CONTROLLERS
 const errorController = require("./controllers/errorController");
 
 const app = express();
@@ -15,15 +21,16 @@ app.use(logger("dev"));
 app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: false }));
 
-//  ROUTES
+//  DEFAULT ROUTES
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/product", productRoutes);
 
 // 404 HANDLER
 app.use("*", (req, res) => {
-  return res.status(400).json({ message: "Page not found" });
+  return next(new AppError(`Page ${req.originalUrl} not found`, 404));
 });
 
-//  GENERAL ERROR HANDLER
+//  GLOBAL ERROR HANDLER
 app.use(errorController);
 
 module.exports = app;

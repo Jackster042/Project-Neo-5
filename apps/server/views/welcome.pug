@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Welcome Email
+  body(style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 20px;")
+    table(style="width: 100%; max-width: 600px; margin: auto; background: #fff; border-collapse: collapse;")
+      tr
+        td(style="padding: 20px; text-align: center;")
+          h1(style="color: #333; font-size: 24px;") Welcome #{username} to Our Service
+          p(style="color: #555; font-size: 16px;") Successfully created account on our website
+             a(href=url target="_blank") #{url}
+          p(style="color: #555; font-size: 16px;") We're excited to have you on board!
+          p(style="color: #555; font-size: 16px;") We will send you further instructions on your email #{email}

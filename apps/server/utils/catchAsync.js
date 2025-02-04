@@ -4,6 +4,7 @@ module.exports = (func) => {
   return function (req, res, next) {
     func(req, res, next).catch((err) => {
       console.log(err, "catchAsync Error");
+      // console.log(err.name, ": err.name s");
 
       // CHECK FOR VALIDATION ERROR MONGOOSE ERROR
       if (err.name === "ValidationError") {
@@ -24,6 +25,16 @@ module.exports = (func) => {
       if (err.name) {
         const message = `Invalid ${err.path}:${err.value}`;
         return next(new AppError(message, 400));
+      }
+
+      // JWT TOKEN ERRORS
+      if (err.name === "TokenExpiredError") {
+        return next(
+          new AppError("Your session has expired. Please log in again.", 401)
+        );
+      }
+      if (err.name === "JsonWebTokenError") {
+        return next(new AppError("Invalid token. Please log in again.", 401));
       }
 
       // TODO: STRIPE ERRORS
