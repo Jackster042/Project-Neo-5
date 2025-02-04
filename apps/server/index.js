@@ -3,6 +3,8 @@ const cors = require("cors");
 const logger = require("morgan");
 const path = require("path");
 
+const userRoutes = require("./routes/userRoutes.js");
+// UTILS
 const errorController = require("./controllers/errorController");
 
 const app = express();
@@ -14,7 +16,7 @@ app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: false }));
 
 //  ROUTES
-app.get("/", (req, res) => res.send("Hello Project NEO 5"));
+app.use("/api/v1/user", userRoutes);
 
 // 404 HANDLER
 app.use("*", (req, res) => {

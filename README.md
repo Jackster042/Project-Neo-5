@@ -166,7 +166,33 @@ Run projects **separately** on different ports for **FRONTEND** and **BACKEND**
 
 ---
 
-# Design the UI/UX
+<!-- # Design the UI/UX -->
+
+# Build the Backend
+
+**RESTful APIs**:
+
+Functional APIs for core features (e.g., products, users, orders).
+
+**Database Integration**:
+
+MongoDB connected with schemas and CRUD operations.
+
+**Authentication**:
+
+JWT-based authentication with protected routes.
+
+**Payment Integration**:
+
+Stripe integration with webhook support.
+
+**Error Handling**:
+
+Centralized error-handling middleware with logging.
+
+Documentation:
+
+API documentation using **Postman\***.
 
 ### **Contact**
 
