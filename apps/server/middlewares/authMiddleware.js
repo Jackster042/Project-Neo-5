@@ -10,7 +10,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
   // console.log(token, "token AUTHENTICATE");
 
   if (!token) {
-    return next(new AppError("Please log in to access this resource", 401));
+    return next(new AppError("Please log in to access this resource", 403));
   }
 
   // 2. Verify the token
@@ -24,7 +24,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
   }
   // 4. Fetch user from DataBase
   const user = await UserModel.findById(decoded._id);
-  if (!user) return next(new AppError("User no longer exists", 404));
+  if (!user) return next(new AppError("User no longer exists", 410));
 
   // 5.Attach user to request
   req.user = user;
@@ -35,7 +35,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
-      return next(new AppError("User is not authenticated", 401));
+      return next(new AppError("User is not authenticated", 403));
     }
 
     if (!roles.includes(req.user.role)) {

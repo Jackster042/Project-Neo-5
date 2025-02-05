@@ -9,8 +9,13 @@ module.exports = (func) => {
       // CHECK FOR VALIDATION ERROR MONGOOSE ERROR
       if (err.name === "ValidationError") {
         const errorMessage = Object.values(err.errors).map((el) => el.message);
-        const message = errorMessage.join(". ");
-        return next(new AppError(message, 400));
+
+        // REMOVES DUPLICATE ERROR MESSAGES
+        const uniqueMessages = [...new Set(errorMessage)];
+
+        const message = uniqueMessages.join(". ");
+
+        return next(new AppError(message, 400)); // 400 - BAD REQUEST
       }
 
       // MONGOOSE DUPLICATE KEY ERROR

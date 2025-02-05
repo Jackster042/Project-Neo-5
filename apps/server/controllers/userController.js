@@ -1,4 +1,5 @@
 const UserModel = require("../models/UserModel");
+const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 // UTILS
@@ -17,8 +18,13 @@ const {
 // ========================
 // ======= REGISTER =======
 // ========================
+
 exports.register = catchAsync(async (req, res, next) => {
   //   console.log(req.body, "req.body  REGISTER");
+  const errors = validationResult(req);
+  console.log(errors, "errors VALIDATION REGISTER");
+
+  if (!errors.isEmpty()) return next(new AppError("Invalid input data", 400));
 
   const user = await UserModel.findOne({ email: req.body.email });
   if (!user) {
@@ -45,6 +51,10 @@ exports.register = catchAsync(async (req, res, next) => {
 // ======= LOGIN =======
 // ========================
 exports.login = catchAsync(async (req, res, next) => {
+  const errors = validationResult(req);
+  console.log(errors, "errors VALIDATION LOGIN");
+
+  if (!errors.isEmpty()) return next(new AppError("Invalid input data", 400));
   // console.log(req.body, "req.body LOGIN");
   const user = await UserModel.findOne({ email: req.body.email }).select(
     "+password"

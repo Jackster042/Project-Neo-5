@@ -14,7 +14,7 @@ exports.refreshToken = async (req, res, next) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken)
-    return next(new AppError("Refresh token is required", 401));
+    return next(new AppError("Refresh token is required", 403));
 
   // 2. Verify the refresh token
   let decoded;
