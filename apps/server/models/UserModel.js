@@ -41,6 +41,7 @@ const UserSchema = new Schema({
   city: { type: String },
   postCode: { type: String },
   votedFor: { type: String },
+  refreshToken: { type: String },
 });
 
 // TODO: PASSWORD VALIDATION

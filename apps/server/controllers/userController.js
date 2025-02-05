@@ -7,7 +7,12 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 
 // CONFIG ENV
-const { JWT_SECRET, JWT_OPTIONS } = require("../config/env.config.js");
+const {
+  JWT_SECRET,
+  JWT_REFRESH_SECRET,
+  JWT_REFRESH_OPTIONS,
+  JWT_OPTIONS,
+} = require("../config/env.config.js");
 
 // ========================
 // ======= REGISTER =======
@@ -59,23 +64,46 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!isCorrectPassword) return next(new AppError("Invalid credentials", 401));
   // console.log(isCorrectPassword, "isCorrectedPassword");
 
+  // TOKEN PAYLOAD
   let payload = {
     _id: user.id,
     role: user.role,
-    // createdAd: new Date().toString()
+  };
+
+  let refreshPayload = {
+    _id: user.id,
   };
   // console.log(payload, "payload");
 
-  let token = jwt.sign(payload, JWT_SECRET, JWT_OPTIONS);
+  // ACCESS TOKEN
+  const accessToken = jwt.sign(payload, JWT_SECRET, JWT_OPTIONS);
+  // console.log(accessToken, "accessToken from LOGIN");
+
+  // REFRESH TOKEN
+  const refreshToken = jwt.sign(
+    refreshPayload,
+    JWT_REFRESH_SECRET,
+    JWT_REFRESH_OPTIONS
+  );
+  // console.log(refreshToken, "refreshToken from LOGIN");
+
+  // SAVE REFRESH TOKEN TO DATABASE
+  user.refreshToken = refreshToken;
+  console.log(user, "before save in DB");
+
+  await user.save({ validateBeforeSave: false });
+
+  // let token = jwt.sign(payload, JWT_SECRET, JWT_OPTIONS);
   // console.log(token, "token");
 
   const { password: _, __v, ...userData } = user.toObject();
-  console.log(userData, "userData");
+  // console.log(userData, "userData");
 
   return res.status(200).json({
     status: "success",
     message: "Successfully logged in",
     user: userData,
-    token,
+    accessToken,
+    refreshToken,
   });
 });
