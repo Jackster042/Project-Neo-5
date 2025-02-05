@@ -1,8 +1,11 @@
 const { Router } = require("express");
 const router = Router();
 
+// CONTROLLERS
 const userController = require("../controllers/userController.js");
 const refreshController = require("../controllers/refreshController.js");
+
+// UTILS
 const authLimiter = require("../middlewares/authLimiter.js");
 const {
   validationRegister,

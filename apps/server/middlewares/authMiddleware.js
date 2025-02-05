@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/env.config.js");
 const catchAsync = require("../utils/catchAsync");
 const UserModel = require("../models/UserModel.js");
+const logger = require("../utils/winstonLogger.js");
 
 exports.authenticate = catchAsync(async (req, res, next) => {
   // 1. Extract token from Authorization header
@@ -10,6 +11,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
   // console.log(token, "token AUTHENTICATE");
 
   if (!token) {
+    logger.error("No token provided!");
     return next(new AppError("Please log in to access this resource", 403));
   }
 

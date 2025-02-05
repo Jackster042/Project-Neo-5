@@ -22,8 +22,7 @@ const {
 exports.register = catchAsync(async (req, res, next) => {
   //   console.log(req.body, "req.body  REGISTER");
   const errors = validationResult(req);
-  console.log(errors, "errors VALIDATION REGISTER");
-
+  // console.log(errors, "errors VALIDATION REGISTER");
   if (!errors.isEmpty()) return next(new AppError("Invalid input data", 400));
 
   const user = await UserModel.findOne({ email: req.body.email });
@@ -52,7 +51,7 @@ exports.register = catchAsync(async (req, res, next) => {
 // ========================
 exports.login = catchAsync(async (req, res, next) => {
   const errors = validationResult(req);
-  console.log(errors, "errors VALIDATION LOGIN");
+  // console.log(errors, "errors VALIDATION LOGIN");
 
   if (!errors.isEmpty()) return next(new AppError("Invalid input data", 400));
   // console.log(req.body, "req.body LOGIN");
@@ -99,7 +98,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // SAVE REFRESH TOKEN TO DATABASE
   user.refreshToken = refreshToken;
-  console.log(user, "before save in DB");
+  // console.log(user, "before save in DB");
 
   await user.save({ validateBeforeSave: false });
 
