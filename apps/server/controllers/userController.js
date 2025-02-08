@@ -32,10 +32,10 @@ exports.register = catchAsync(async (req, res, next) => {
     // console.log(savedUser, "savedUser");
 
     // TODO: SEND EMAIL TO USER
-    await new Email(
-      { email: savedUser.email, username: savedUser.username },
-      "http://localhost:4000"
-    ).sendWelcome();
+    // await new Email(
+    //   { email: savedUser.email, username: savedUser.username },
+    //   "http://localhost:4000"
+    // ).sendWelcome();
 
     return res.status(200).json({
       status: "success",

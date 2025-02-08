@@ -12,6 +12,7 @@ const {
 exports.refreshToken = async (req, res, next) => {
   // 1. Check if the refresh token is provided
   const { refreshToken } = req.body;
+  // console.log(refreshToken, "Old Refresh Token");
 
   if (!refreshToken)
     return next(new AppError("Refresh token is required", 403));
@@ -27,8 +28,8 @@ exports.refreshToken = async (req, res, next) => {
 
   // 3. Find the user by the decoded user ID
   const user = await UserModel.findById(decoded._id);
-  console.log(user, "user REFRESH");
-  //   console.log(refreshToken, "refreshToken");
+  // console.log(user, "user REFRESH");
+  // console.log(user.refreshToken, "User Refresh Token");
 
   if (!user || user.refreshToken !== refreshToken) {
     return next(new AppError("Invalid refresh token", 401));
