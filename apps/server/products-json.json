@@ -1,0 +1,313 @@
+[
+  {
+    "title": "Premium Wireless Headphones",
+    "description": "High-quality wireless headphones with noise cancellation and 30-hour battery life",
+    "price": 199.99,
+    "image": "https://example.com/images/headphones.jpg",
+    "rating": 4.5,
+    "allRating": [4, 5, 4, 5, 4.5]
+  },
+  {
+    "title": "Ergonomic Office Chair",
+    "description": "Adjustable office chair with lumbar support and breathable mesh back",
+    "price": 299.99,
+    "image": "https://example.com/images/office-chair.jpg",
+    "rating": 4.8,
+    "allRating": [5, 4.5, 5, 4.8, 4.7]
+  },
+  {
+    "title": "Smart Fitness Watch",
+    "description": "Water-resistant fitness tracker with heart rate monitoring and GPS",
+    "price": 149.99,
+    "image": "https://example.com/images/fitness-watch.jpg",
+    "rating": 4.3,
+    "allRating": [4, 4.5, 4.2, 4.5]
+  },
+  {
+    "title": "Professional Blender",
+    "description": "1200W high-speed blender with multiple settings for smoothies and food processing",
+    "price": 129.99,
+    "image": "https://example.com/images/blender.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Leather Laptop Bag",
+    "description": "Genuine leather laptop bag with multiple compartments and shoulder strap",
+    "price": 89.99,
+    "image": "https://example.com/images/laptop-bag.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Mechanical Gaming Keyboard",
+    "description": "RGB mechanical keyboard with Cherry MX switches and multimedia controls",
+    "price": 159.99,
+    "image": "https://example.com/images/keyboard.jpg",
+    "rating": 4.7,
+    "allRating": [4.8, 4.6, 4.7, 4.7]
+  },
+  {
+    "title": "4K Ultra HD Monitor",
+    "description": "27-inch 4K monitor with HDR support and adjustable stand",
+    "price": 399.99,
+    "image": "https://example.com/images/monitor.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Ceramic Coffee Maker",
+    "description": "Pour-over coffee maker with ceramic filter and heat-resistant glass",
+    "price": 49.99,
+    "image": "https://example.com/images/coffee-maker.jpg",
+    "rating": 4.2,
+    "allRating": [4.0, 4.3, 4.2, 4.3]
+  },
+  {
+    "title": "Wireless Gaming Mouse",
+    "description": "Rechargeable gaming mouse with adjustable DPI and programmable buttons",
+    "price": 79.99,
+    "image": "https://example.com/images/gaming-mouse.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Smart LED Desk Lamp",
+    "description": "Adjustable LED lamp with wireless charging base and multiple light modes",
+    "price": 69.99,
+    "image": "https://example.com/images/desk-lamp.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Portable Power Bank",
+    "description": "20000mAh power bank with fast charging and dual USB ports",
+    "price": 45.99,
+    "image": "https://example.com/images/power-bank.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Premium Yoga Mat",
+    "description": "Eco-friendly non-slip yoga mat with carrying strap",
+    "price": 39.99,
+    "image": "https://example.com/images/yoga-mat.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Stainless Steel Water Bottle",
+    "description": "Vacuum-insulated water bottle with 24-hour temperature retention",
+    "price": 29.99,
+    "image": "https://example.com/images/water-bottle.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Wireless Charging Pad",
+    "description": "Fast wireless charger compatible with all Qi-enabled devices",
+    "price": 34.99,
+    "image": "https://example.com/images/charging-pad.jpg",
+    "rating": 4.2,
+    "allRating": [4.1, 4.3, 4.2, 4.2]
+  },
+  {
+    "title": "Bluetooth Speaker",
+    "description": "Waterproof portable speaker with 12-hour battery life",
+    "price": 89.99,
+    "image": "https://example.com/images/bluetooth-speaker.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Digital Drawing Tablet",
+    "description": "Graphics tablet with 8192 pressure levels and wireless capability",
+    "price": 199.99,
+    "image": "https://example.com/images/drawing-tablet.jpg",
+    "rating": 4.7,
+    "allRating": [4.6, 4.8, 4.7, 4.7]
+  },
+  {
+    "title": "Smart Home Security Camera",
+    "description": "1080p wireless security camera with night vision and two-way audio",
+    "price": 79.99,
+    "image": "https://example.com/images/security-camera.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Electric Kettle",
+    "description": "1.7L stainless steel electric kettle with temperature control",
+    "price": 49.99,
+    "image": "https://example.com/images/kettle.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Adjustable Dumbbell Set",
+    "description": "Space-saving adjustable dumbbells from 5-52.5 lbs",
+    "price": 299.99,
+    "image": "https://example.com/images/dumbbells.jpg",
+    "rating": 4.8,
+    "allRating": [4.7, 4.9, 4.8, 4.8]
+  },
+  {
+    "title": "Air Purifier",
+    "description": "HEPA air purifier with PM2.5 filter and quiet operation",
+    "price": 149.99,
+    "image": "https://example.com/images/air-purifier.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "USB-C Hub",
+    "description": "7-in-1 USB-C hub with 4K HDMI and power delivery",
+    "price": 59.99,
+    "image": "https://example.com/images/usb-hub.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Smart Plant Pot",
+    "description": "Self-watering pot with soil moisture monitoring",
+    "price": 44.99,
+    "image": "https://example.com/images/plant-pot.jpg",
+    "rating": 4.2,
+    "allRating": [4.1, 4.3, 4.2, 4.2]
+  },
+  {
+    "title": "Digital Food Scale",
+    "description": "Kitchen scale with tare function and multiple units",
+    "price": 24.99,
+    "image": "https://example.com/images/food-scale.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Memory Foam Pillow",
+    "description": "Cervical support pillow with cooling gel technology",
+    "price": 69.99,
+    "image": "https://example.com/images/pillow.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Bike Phone Mount",
+    "description": "Universal bicycle phone holder with 360-degree rotation",
+    "price": 19.99,
+    "image": "https://example.com/images/bike-mount.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Wireless Earbuds",
+    "description": "True wireless earbuds with active noise cancellation",
+    "price": 129.99,
+    "image": "https://example.com/images/earbuds.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Smart Door Lock",
+    "description": "Fingerprint and code-enabled smart lock with app control",
+    "price": 199.99,
+    "image": "https://example.com/images/door-lock.jpg",
+    "rating": 4.7,
+    "allRating": [4.6, 4.8, 4.7, 4.7]
+  },
+  {
+    "title": "Desktop Organizer",
+    "description": "Bamboo desk organizer with wireless charging pad",
+    "price": 49.99,
+    "image": "https://example.com/images/desk-organizer.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Car Phone Mount",
+    "description": "Dashboard phone mount with automatic clamping",
+    "price": 29.99,
+    "image": "https://example.com/images/car-mount.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Indoor Security Camera",
+    "description": "1080p indoor camera with motion detection and cloud storage",
+    "price": 89.99,
+    "image": "https://example.com/images/indoor-camera.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Smart Coffee Scale",
+    "description": "Bluetooth coffee scale with timer and flow rate indication",
+    "price": 99.99,
+    "image": "https://example.com/images/coffee-scale.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Laptop Stand",
+    "description": "Adjustable aluminum laptop stand with cooling ventilation",
+    "price": 39.99,
+    "image": "https://example.com/images/laptop-stand.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Wireless Keyboard",
+    "description": "Slim wireless keyboard with numeric keypad",
+    "price": 79.99,
+    "image": "https://example.com/images/wireless-keyboard.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Cable Management Box",
+    "description": "Large cable organizer box with multiple outlets",
+    "price": 34.99,
+    "image": "https://example.com/images/cable-box.jpg",
+    "rating": 4.5,
+    "allRating": [4.4, 4.6, 4.5, 4.5]
+  },
+  {
+    "title": "Smart Light Bulbs",
+    "description": "Color-changing smart LED bulbs with voice control",
+    "price": 39.99,
+    "image": "https://example.com/images/smart-bulbs.jpg",
+    "rating": 4.4,
+    "allRating": [4.3, 4.5, 4.4, 4.4]
+  },
+  {
+    "title": "Resistance Bands Set",
+    "description": "5-piece resistance bands set with door anchor",
+    "price": 29.99,
+    "image": "https://example.com/images/resistance-bands.jpg",
+    "rating": 4.6,
+    "allRating": [4.5, 4.7, 4.6, 4.6]
+  },
+  {
+    "title": "Wireless Presenter",
+    "description": "RF presenter with laser pointer and timer",
+    "price": 24.99,
+    "image": "https://example.com/images/presenter.jpg",
+    "rating": 4.2,
+    "allRating": [4.1, 4.3, 4.2, 4.2]
+  },
+  {
+    "title": "Desktop Humidifier",
+    "description": "USB portable humidifier with LED light",
+    "price": 19.99,
+    "image": "https://example.com/images/humidifier.jpg",
+    "rating": 4.3,
+    "allRating": [4.2, 4.4, 4.3, 4.3]
+  },
+  {
+    "title": "Camera Tripod",
+    "description": "Lightweight aluminum tripod with smartphone mount",
+    "price": 49.99,
+    "image": "https://example.com/images/tripod.jpg",
+    "rating": 4.5
+  }
+]
