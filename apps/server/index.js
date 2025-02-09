@@ -9,6 +9,7 @@ const AppError = require("./utils/AppError.js");
 // ROUTES IMPORTS
 const userRoutes = require("./routes/userRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
+const categoryRoutes = require("./routes/categoryRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 
 // CONTROLLERS
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 //  DEFAULT ROUTES
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
 // 404 HANDLER

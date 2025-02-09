@@ -8,6 +8,5 @@ const productController = require("../controllers/productController.js");
 const { authenticate } = require("../middlewares/authMiddleware.js");
 
 router.route("/").get(productController.getAllProducts);
-router.route("/categories").get(productController.getAllCategories);
 
 module.exports = router;
