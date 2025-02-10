@@ -11,6 +11,9 @@ const userRoutes = require("./routes/userRoutes.js");
 const productRoutes = require("./routes/productRoutes.js");
 const categoryRoutes = require("./routes/categoryRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
+const cartRoutes = require("./routes/cartRoutes.js");
+const orderRoutes = require("./routes/orderRoutes.js");
+const paymentRoutes = require("./routes/paymentRoutes.js");
 
 // CONTROLLERS
 const errorController = require("./controllers/errorController");
@@ -28,6 +31,9 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/payment", paymentRoutes);
 
 // 404 HANDLER
 app.use("*", (req, res) => {
