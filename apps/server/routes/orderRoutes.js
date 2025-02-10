@@ -3,9 +3,11 @@ const router = Router();
 
 const orderController = require("../controllers/orderController.js");
 
+const { authenticate } = require("../middlewares/authMiddleware.js");
+
 // TODO: NOTE - ALL THESE ROUTES WILL BE PROTECTED
 
-router.route("/").get(orderController.getOrder);
-router.route("/").post(orderController.createOrder);
+router.route("/").get(authenticate, orderController.getOrder);
+router.route("/").post(authenticate, orderController.createOrder);
 
 module.exports = router;

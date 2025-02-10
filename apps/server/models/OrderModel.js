@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const AppError = require("../utils/AppError");
 
 const OrderSchema = new Schema(
   {
@@ -6,6 +7,10 @@ const OrderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "users",
       required: [true, "Used ID is required"],
+    },
+    userEmail: {
+      type: String,
+      required: [true, "Email is required"], // USEFUL FOR NOTIFICATION
     },
     products: [
       {
@@ -31,9 +36,13 @@ const OrderSchema = new Schema(
       required: [true, "Total price is required"],
       min: 0,
     },
+    // OBJECT INSTEAD OF STRING FOR BETTER FLEXIBILITY
     shippingAddress: {
-      type: String,
-      required: [true, "Shipping address is required"],
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String },
+      zip: { type: String, required: true },
+      country: { type: String, required: true },
     },
     paymentMethod: {
       type: String,
@@ -50,24 +59,27 @@ const OrderSchema = new Schema(
       enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
       default: "pending",
     },
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
+    trackingNumber: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// OrderSchema.pre("save", function (next) {
-//   this.updatedAt = Date.now();
-//   next();
-// });
+OrderSchema.pre("save", function (next) {
+  const calculatedTotal = this.products.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  if (Math.abs(this.totalPrice - calculatedTotal) > 0.01) {
+    next(new AppError("Total price does not match calculated value", 409));
+  }
+  next();
+});
 
 const OrderModel = model("orders", OrderSchema);
 module.exports = OrderModel;
