@@ -18,13 +18,6 @@ router
   .put(authenticate, orderController.updateOrderStatus);
 router.route("/:orderID").get(authenticate, orderController.getOrderById);
 
-router.patch("/cancel/:orderId", authenticate, orderController.cancelOrder);
-
-router.patch(
-  "/admin/cancel/:orderId",
-  authenticate,
-  restrictTo("admin"),
-  orderController.adminCancelOrder
-);
+router.patch("/cancel/:orderID", authenticate, orderController.cancelOrder);
 
 module.exports = router;

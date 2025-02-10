@@ -43,10 +43,14 @@ exports.getOrders = catchAsync(async (req, res) => {
 });
 
 exports.getOrderById = catchAsync(async (req, res, next) => {
+  if (!req.params.orderID) {
+    return next(new AppError("Order ID is required", 400));
+  }
   const order = await OrderModel.findOne({
-    _id: req.params.orderId,
+    _id: req.params.orderID,
     user: req.user._id,
   }).populate("products.product");
+  console.log(order, "order");
 
   if (!order) {
     return next(new AppError("Order not found", 404));
@@ -54,15 +58,16 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
 
   res.json({
     status: "success",
-    data: { order },
+    order,
   });
 });
 
 exports.updateOrderStatus = catchAsync(async (req, res, next) => {
   const { orderStatus } = req.body;
+  console.log(orderStatus, "orderStatus");
 
   const order = await OrderModel.findOneAndUpdate(
-    { _id: req.params.orderId, user: req.user._id },
+    { _id: req.params.orderID, user: req.user._id },
     { orderStatus },
     { new: true, runValidators: true }
   );
@@ -79,7 +84,7 @@ exports.updateOrderStatus = catchAsync(async (req, res, next) => {
 
 exports.cancelOrder = catchAsync(async (req, res, next) => {
   const order = await OrderModel.findOne({
-    _id: req.params.orderId,
+    _id: req.params.orderID,
     user: req.user._id,
   });
 
@@ -122,53 +127,6 @@ exports.cancelOrder = catchAsync(async (req, res, next) => {
   res.json({
     status: "success",
     message: "Order cancelled successfully",
-    data: { order },
-  });
-});
-
-// Optional: Add admin-only cancellation with reason
-exports.adminCancelOrder = catchAsync(async (req, res, next) => {
-  const { reason } = req.body;
-
-  const order = await OrderModel.findById(req.params.orderId);
-
-  if (!order) {
-    return next(new AppError("Order not found", 404));
-  }
-
-  if (!["pending", "processing"].includes(order.orderStatus)) {
-    return next(
-      new AppError(
-        "Order cannot be cancelled. Only pending or processing orders can be cancelled",
-        400
-      )
-    );
-  }
-
-  // Update order status with admin reason
-  order.orderStatus = "cancelled";
-  order.cancelReason = reason;
-  await order.save();
-
-  // If payment exists, handle refund
-  if (order.paymentStatus === "completed") {
-    const payment = await PaymentModel.findOne({ order: order._id });
-    if (payment) {
-      payment.status = "refunded";
-      payment.refundDetails = {
-        isRefunded: true,
-        refundAmount: payment.amount,
-        refundDate: new Date(),
-        refundReason: reason || "Cancelled by admin",
-        refundTransactionId: `ref_${Date.now()}`,
-      };
-      await payment.save();
-    }
-  }
-
-  res.json({
-    status: "success",
-    message: "Order cancelled by admin",
     data: { order },
   });
 });
