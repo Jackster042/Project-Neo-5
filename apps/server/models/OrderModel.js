@@ -63,6 +63,10 @@ const OrderSchema = new Schema(
       type: String,
       default: null,
     },
+    cancelReason: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

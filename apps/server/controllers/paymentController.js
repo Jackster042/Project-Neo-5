@@ -4,6 +4,10 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
+// exports.processPayment = catchAsync(async (req, res, next) => {
+//   res.send("Hello from PROCESS PAYMENT");
+// });
+
 exports.createPaymentIntent = catchAsync(async (req, res, next) => {
   const { orderId } = req.body;
 
@@ -16,11 +20,14 @@ exports.createPaymentIntent = catchAsync(async (req, res, next) => {
     return next(new AppError("Order not found", 404));
   }
 
-  // Create Stripe Payment Intent
+  // Create Stripe Payment Intent with more metadata
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: order.totalPrice * 100, // convert to cents
+    amount: order.totalPrice * 100,
     currency: "eur",
-    metadata: { orderId: order._id.toString() },
+    metadata: {
+      orderId: order._id.toString(),
+      userId: req.user._id.toString(),
+    },
   });
 
   res.json({
@@ -34,28 +41,54 @@ exports.handlePaymentWebhook = catchAsync(async (req, res) => {
   let event;
 
   try {
+    // Verify the webhook signature
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
+    // If signature verification fails
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  if (event.type === "payment_intent.succeeded") {
-    const paymentIntent = event.data.object;
+  // Handle different event types
+  switch (event.type) {
+    case "payment_intent.succeeded":
+      const paymentIntent = event.data.object;
 
-    await PaymentModel.create({
-      order: paymentIntent.metadata.orderId,
-      user: req.user._id,
-      amount: paymentIntent.amount / 100,
-      currency: paymentIntent.currency,
-      status: "completed",
-      transactionId: paymentIntent.id,
-      paymentProvider: "stripe",
-      paymentMethod: "credit_card",
-    });
+      // Create payment record
+      await PaymentModel.create({
+        order: paymentIntent.metadata.orderId,
+        user: paymentIntent.metadata.userId, // Add userId to metadata when creating intent
+        amount: paymentIntent.amount / 100,
+        currency: paymentIntent.currency,
+        status: "completed",
+        transactionId: paymentIntent.id,
+        paymentProvider: "stripe",
+        paymentMethod: "credit_card",
+      });
+
+      // Update order status
+      await OrderModel.findByIdAndUpdate(paymentIntent.metadata.orderId, {
+        paymentStatus: "completed",
+        orderStatus: "processing",
+      });
+      break;
+
+    case "payment_intent.payment_failed":
+      const failedPayment = event.data.object;
+
+      // Update order status
+      await OrderModel.findByIdAndUpdate(failedPayment.metadata.orderId, {
+        paymentStatus: "failed",
+      });
+      break;
+
+    case "charge.refunded":
+      const refund = event.data.object;
+      // Handle refund confirmation
+      break;
   }
 
   res.json({ received: true });

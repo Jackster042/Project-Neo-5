@@ -14,9 +14,11 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
 const orderRoutes = require("./routes/orderRoutes.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
+const shippingRoutes = require("./routes/shippingRoutes.js");
 
 // CONTROLLERS
 const errorController = require("./controllers/errorController");
+const paymentController = require("./controllers/paymentController.js");
 
 const app = express();
 
@@ -26,6 +28,12 @@ app.use(logger("dev"));
 app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: false }));
 
+// Payment webhook route - needs raw body
+app.post(
+  "/api/v1/payment/webhook",
+  express.raw({ type: "application/json" }),
+  paymentController.handlePaymentWebhook
+);
 //  DEFAULT ROUTES
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
@@ -34,6 +42,7 @@ app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/shipping", shippingRoutes);
 
 // 404 HANDLER
 app.use("*", (req, res) => {

@@ -2,9 +2,29 @@ const { Router } = require("express");
 const router = Router();
 
 const paymentController = require("../controllers/paymentController.js");
+const {
+  authenticate,
+  restrictTo,
+} = require("../middlewares/authMiddleware.js");
 
-// TODO: NOTE - ALL THESE ROUTES WILL BE PROTECTED
+// Protected payment routes
+router.use(authenticate); // Apply authentication to all payment routes
 
-router.route("/").post(paymentController.processPayment);
+// Create payment intent (when customer initiates payment)
+router.post("/create-payment-intent", paymentController.createPaymentIntent);
+
+// Get payments for a specific order
+router.get("/order/:orderId", paymentController.getPaymentsByOrder);
+
+// Process refund - restricted to admin
+router.post(
+  "/refund/:paymentId",
+  restrictTo("admin"),
+  paymentController.processRefund
+);
+
+// Stripe webhook - should be unprotected and raw body available
+// This should be used in your main app.js/index.js instead
+// app.post('/webhook', express.raw({type: 'application/json'}), paymentController.handlePaymentWebhook);
 
 module.exports = router;
