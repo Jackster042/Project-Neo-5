@@ -24,14 +24,6 @@ const CommentSchema = new Schema(
       enum: ["pending", "approved", "rejected"], // More descriptive status
       default: "pending",
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt`

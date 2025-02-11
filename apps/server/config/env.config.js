@@ -26,6 +26,7 @@ const JWT_REFRESH_OPTIONS = {
 };
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 module.exports = {
   JWT_SECRET,
@@ -33,4 +34,5 @@ module.exports = {
   JWT_REFRESH_OPTIONS,
   JWT_OPTIONS,
   STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET,
 };

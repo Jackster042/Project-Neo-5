@@ -24,6 +24,12 @@ const startServer = async () => {
     await mongoose.connect(DB_URL);
     console.log(`MongoDB connected! ${mongoose.connection.host}`);
 
+    // Add this after MongoDB connection
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+      console.error("Missing STRIPE_WEBHOOK_SECRET");
+      process.exit(1);
+    }
+
     // Start server after successful DB connection
     const server = app.listen(PORT, () => {
       console.log(`Application running on http://localhost:${PORT}`);

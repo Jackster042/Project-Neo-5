@@ -82,6 +82,17 @@ OrderSchema.pre("save", function (next) {
   if (Math.abs(this.totalPrice - calculatedTotal) > 0.01) {
     next(new AppError("Total price does not match calculated value", 409));
   }
+
+  // Add logging for status changes
+  if (this.isModified("orderStatus") || this.isModified("paymentStatus")) {
+    console.log("Status change:", {
+      orderId: this._id,
+      oldOrderStatus: this._original?.orderStatus,
+      newOrderStatus: this.orderStatus,
+      oldPaymentStatus: this._original?.paymentStatus,
+      newPaymentStatus: this.paymentStatus,
+    });
+  }
   next();
 });
 

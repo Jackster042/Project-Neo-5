@@ -23,17 +23,16 @@ const paymentController = require("./controllers/paymentController.js");
 const app = express();
 
 // MIDDLEWARES
-app.use(express.json());
-app.use(logger("dev"));
-app.use(cors({ origin: "*" }));
-app.use(express.urlencoded({ extended: false }));
-
-// Payment webhook route - needs raw body
 app.post(
   "/api/v1/payment/webhook",
   express.raw({ type: "application/json" }),
   paymentController.handlePaymentWebhook
 );
+app.use(express.json());
+app.use(logger("dev"));
+app.use(cors({ origin: "*" }));
+app.use(express.urlencoded({ extended: false }));
+
 //  DEFAULT ROUTES
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);

@@ -3,16 +3,13 @@ const OrderModel = require("../models/OrderModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
-// exports.processPayment = catchAsync(async (req, res, next) => {
-//   res.send("Hello from PROCESS PAYMENT");
-// });
+const mongoose = require("mongoose");
 
 exports.createPaymentIntent = catchAsync(async (req, res, next) => {
-  const { orderId } = req.body;
+  const { orderID } = req.body;
 
   const order = await OrderModel.findOne({
-    _id: orderId,
+    _id: orderID,
     user: req.user._id,
   });
 
@@ -37,72 +34,108 @@ exports.createPaymentIntent = catchAsync(async (req, res, next) => {
 });
 
 exports.handlePaymentWebhook = catchAsync(async (req, res) => {
-  const sig = req.headers["stripe-signature"];
-  let event;
+  console.log("\n🔄 Starting Webhook Processing");
 
+  // Log raw data
+  const rawBody = req.body;
+  const signature = req.headers["stripe-signature"];
+
+  console.log("Signature:", signature);
+  console.log(
+    "Webhook Secret:",
+    process.env.STRIPE_WEBHOOK_SECRET?.slice(0, 10) + "..."
+  );
+
+  let event;
   try {
-    // Verify the webhook signature
     event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
+      rawBody,
+      signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-  } catch (err) {
-    // If signature verification fails
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
 
-  // Handle different event types
-  switch (event.type) {
-    case "payment_intent.succeeded":
+    console.log("\n✅ Webhook Verified:", event.type);
+
+    if (event.type === "payment_intent.succeeded") {
       const paymentIntent = event.data.object;
 
-      // Create payment record
-      await PaymentModel.create({
-        order: paymentIntent.metadata.orderId,
-        user: paymentIntent.metadata.userId, // Add userId to metadata when creating intent
-        amount: paymentIntent.amount / 100,
-        currency: paymentIntent.currency,
-        status: "completed",
-        transactionId: paymentIntent.id,
-        paymentProvider: "stripe",
-        paymentMethod: "credit_card",
-      });
+      console.log("🔹 Payment Intent Metadata:", paymentIntent.metadata);
 
-      // Update order status
-      await OrderModel.findByIdAndUpdate(paymentIntent.metadata.orderId, {
-        paymentStatus: "completed",
-        orderStatus: "processing",
-      });
-      break;
+      // Add transaction
+      const session = await mongoose.startSession();
+      session.startTransaction();
 
-    case "payment_intent.payment_failed":
-      const failedPayment = event.data.object;
+      try {
+        // Find order first
+        const order = await OrderModel.findById(
+          paymentIntent.metadata.orderId
+        ).session(session);
 
-      // Update order status
-      await OrderModel.findByIdAndUpdate(failedPayment.metadata.orderId, {
-        paymentStatus: "failed",
-      });
-      break;
+        if (!order) {
+          throw new Error(`Order ${paymentIntent.metadata.orderId} not found`);
+        }
 
-    case "charge.refunded":
-      const refund = event.data.object;
-      // Handle refund confirmation
-      break;
+        // Create payment record
+        const payment = await PaymentModel.create(
+          [
+            {
+              order: order._id,
+              user: paymentIntent.metadata.userId,
+              amount: paymentIntent.amount / 100,
+              currency: paymentIntent.currency,
+              status: "completed",
+              transactionId: paymentIntent.id,
+              paymentProvider: "stripe",
+              paymentMethod: "credit_card",
+            },
+          ],
+          { session }
+        );
+
+        // ✅ Correct way to update order inside a transaction
+        const updatedOrder = await OrderModel.findByIdAndUpdate(
+          order._id,
+          {
+            paymentStatus: "completed",
+            orderStatus: "processing",
+          },
+          { new: true, runValidators: true, session }
+        );
+
+        await session.commitTransaction();
+        session.endSession();
+        console.log("✅ Transaction committed successfully");
+
+        return res.json({
+          received: true,
+          order: updatedOrder._id,
+          payment: payment[0]._id,
+        });
+      } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        console.error("❌ Transaction failed:", error);
+        throw error;
+      }
+    }
+
+    return res.json({ received: true });
+  } catch (err) {
+    console.error("❌ Webhook Error:", err);
+    return res.status(400).json({ error: err.message });
   }
-
-  res.json({ received: true });
 });
 
 exports.getPaymentsByOrder = catchAsync(async (req, res, next) => {
-  const payments = await PaymentModel.find({
-    order: req.params.orderId,
-    user: req.user._id,
+  const payments = await stripe.charges.list({
+    limit: 10, // Adjust as needed
   });
+
+  console.log(payments.data, "payments from STRIPE");
 
   res.json({
     status: "success",
-    data: { payments },
+    payments, // Stripe returns payments in "data" array
   });
 });
 
@@ -140,4 +173,36 @@ exports.processRefund = catchAsync(async (req, res, next) => {
     status: "success",
     data: { payment },
   });
+});
+
+exports.testWebhook = catchAsync(async (req, res) => {
+  console.log("Webhook Secret:", process.env.STRIPE_WEBHOOK_SECRET);
+  console.log("Stripe Key:", process.env.STRIPE_SECRET_KEY);
+
+  res.json({
+    webhookConfigured: !!process.env.STRIPE_WEBHOOK_SECRET,
+    stripeConfigured: !!process.env.STRIPE_SECRET_KEY,
+  });
+});
+
+// Add a test route for manual confirmation (for testing only)
+exports.testConfirmPaymentIntent = catchAsync(async (req, res) => {
+  try {
+    // Payment Intent ID you want to simulate the success for
+    const paymentIntentId = "pi_3QrRQdFtsmERsX7M1wDNMlLP"; // Replace with your actual payment intent ID
+
+    // Confirm the payment intent to trigger the payment_intent.succeeded event
+    const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId);
+
+    console.log("Payment Intent confirmed:", paymentIntent);
+
+    // Return the payment intent details
+    return res.json({
+      message: "Payment intent confirmed successfully.",
+      paymentIntent,
+    });
+  } catch (err) {
+    console.error("Error confirming payment intent:", err);
+    return res.status(500).json({ error: err.message });
+  }
 });

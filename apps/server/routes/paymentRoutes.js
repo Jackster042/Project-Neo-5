@@ -12,13 +12,17 @@ router.use(authenticate); // Apply authentication to all payment routes
 
 // Create payment intent (when customer initiates payment)
 router.post("/create-payment-intent", paymentController.createPaymentIntent);
+router.post(
+  "/test-confirm-payment",
+  paymentController.testConfirmPaymentIntent
+);
 
 // Get payments for a specific order
-router.get("/order/:orderId", paymentController.getPaymentsByOrder);
+router.get("/order/:orderID", paymentController.getPaymentsByOrder);
 
 // Process refund - restricted to admin
 router.post(
-  "/refund/:paymentId",
+  "/refund/:paymentID",
   restrictTo("admin"),
   paymentController.processRefund
 );
