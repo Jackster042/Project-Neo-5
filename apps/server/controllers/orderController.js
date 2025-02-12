@@ -24,7 +24,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
-    data: { order },
+    order,
   });
 });
 

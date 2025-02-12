@@ -22,27 +22,29 @@ const CartSchema = new Schema(
           required: [true, "Product quantity is required"],
           min: 1,
         },
+        price: {
+          type: Number,
+          required: [true, "Product price is required"],
+        },
       },
     ],
-    // createdAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   default: Date.now,
-    // },
+    totalPrice: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true, // AUTOMATICALLY HANDLES CRATED_AT  & UPDATED_AT
   }
 );
 
-// Update the `updatedAt` field before saving
-// CartSchema.pre("save", function (next) {
-//   this.updatedAt = Date.now();
-//   next();
-// });
+// Add middleware to calculate totalPrice before saving
+CartSchema.pre("save", async function (next) {
+  this.totalPrice = this.products.reduce((total, item) => {
+    return total + item.price * item.quantity;
+  }, 0);
+  next();
+});
 
 const CartModel = model("carts", CartSchema);
 module.exports = CartModel;

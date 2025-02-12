@@ -1,6 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 
 const CartModel = require("../models/CartModel");
+const ProductModel = require("../models/ProductModel");
 
 //=================================================//
 //================   GET CART     =================//
@@ -17,7 +18,7 @@ exports.getCart = catchAsync(async (req, res, next) => {
     })
     .lean();
 
-  // console.log(cart, "cart from GET CART");
+  console.log(cart, "cart from GET CART");
 
   if (!cart)
     return res.status(404).json({
@@ -41,7 +42,6 @@ exports.addToCart = catchAsync(async (req, res, next) => {
   console.log(req.body, "req.body ADD TO CART");
   console.log(req.user, "req.user");
 
-  // DESTRUCT FROM FEQ.BODY PRODUCT_ID & QUANTITY
   const { productID, quantity } = req.body;
 
   if (!productID || quantity < 1)
@@ -49,17 +49,17 @@ exports.addToCart = catchAsync(async (req, res, next) => {
       .status(400)
       .json({ status: "fail", message: "Invalid productID & quantity" });
 
+  // Get product price from database
+  const product = await ProductModel.findById(productID);
+  if (!product) {
+    return res.status(404).json({
+      status: "fail",
+      message: "Product not found",
+    });
+  }
+
   let cart = await CartModel.findOne({ user: req.user._id });
-  console.log(cart, "cart from ADD TO CART");
 
-  // TODO:  TEST RETURN IF NO CART
-  // if (!cart)
-  //   return res.status(404).json({
-  //     message: "No carts found",
-  //     cart: null,
-  //   });
-
-  // IF NO CART IN DATABASE, CREATE EMPTY CART
   if (!cart)
     cart = new CartModel({
       user: req.user._id,
@@ -69,7 +69,6 @@ exports.addToCart = catchAsync(async (req, res, next) => {
   const productIndex = cart.products.findIndex(
     (p) => p.product.toString() === productID
   );
-  // console.log(productIndex, "productIndex");
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity = Math.max(
@@ -77,15 +76,15 @@ exports.addToCart = catchAsync(async (req, res, next) => {
       1
     );
   } else {
-    cart.products.push({ product: productID, quantity });
+    cart.products.push({
+      product: productID,
+      quantity,
+      price: product.price, // Add the product price to cart item
+    });
   }
 
-  // SAVE CART IN DB
   const updatedCart = await cart.save();
-  console.log(updatedCart, "updatedCart");
 
-  // TODO: TEST IN POSTMAN, TO SEE IF FIND_BY_ID WILL THROW ERROR
-  // POPULATE CART VAR ONLY WANT VALUES WE WANT TO SEND TO FRONTEND
   const populatedCart = await CartModel.findById(updatedCart._id).populate({
     path: "products.product",
     select: "title price image",
@@ -112,28 +111,25 @@ exports.removeFromCart = catchAsync(async (req, res, next) => {
   console.log(req.user, "req.user fom REMOVE ITEMS FOM CART");
 
   let cart = await CartModel.findOne({ user: req.user._id });
-  // console.log(cart, "cart from REMOVE PRODUCT FROM CART");
   if (!cart) return res.status(400).json({ message: "Cart not found" });
 
-  const productIndex = cart.products.filter(
-    (p = p.product.toString() === req.params.productID)
+  const productIndex = cart.products.findIndex(
+    (p) => p.product.toString() === req.params.productID
   );
+
   if (productIndex === -1)
     return res
       .status(404)
       .json({ status: "fail", message: "Item not found in cart" });
 
-  // IF PRODUCT IN CART, REMOVE IT
   cart.products.splice(productIndex, 1);
-
   const updatedCart = await cart.save();
 
-  const populatedCart = await CartModel.findOne(updatedCart._id).populate({
+  const populatedCart = await CartModel.findById(updatedCart._id).populate({
     path: "products.product",
     select: "title price image",
   });
 
-  // DEBUG LOG
   console.log("✅ Updated Cart:", populatedCart);
 
   return res.status(200).json({

@@ -1,8 +1,6 @@
 const sendErrorDev = (err, res, req, next) => {
-  console.log(err, "error from ErrorController");
-  // console.log(err.status, "err.status");
-  // console.log(err.message, "err.message");
-  // console.log(err.stack, "err.stack");
+  // Use proper logging instead of console.log
+  console.error("[Development Error]:", err);
 
   res.status(err.statusCode).json({
     err: err,
@@ -13,6 +11,8 @@ const sendErrorDev = (err, res, req, next) => {
 };
 
 const sendErrorProd = (err, req, res, next) => {
+  // Log error in production but don't expose to client
+  console.error("[Production Error]:", err);
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
@@ -27,7 +27,7 @@ const sendErrorProd = (err, req, res, next) => {
 };
 
 const sendErrorTest = (err, req, res, next) => {
-  if (er.isOperational) {
+  if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
@@ -46,11 +46,31 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
-  if ((process.env.NODE_ENV = "development")) {
+  if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
-  } else if ((process.env.NODE_ENV = "production")) {
+  } else if (process.env.NODE_ENV === "production") {
     sendErrorProd(err, res);
-  } else if ((process.env.NODE_ENV = "test")) {
+  } else if (process.env.NODE_ENV === "test") {
     sendErrorTest(err, res);
   }
 };
+
+// / Normalize error object
+// const normalizeError = (err) => {
+//   err.statusCode = err.statusCode || 500;
+//   err.status = err.status || 'error';
+//   return err;
+// };
+
+// module.exports = (err, req, res, next) => {
+//   const normalizedError = normalizeError(err);
+
+//   // Fix comparison operators
+//   if (process.env.NODE_ENV === 'development') {
+//     sendErrorDev(normalizedError, req, res, next);
+//   } else if (process.env.NODE_ENV === 'production') {
+//     sendErrorProd(normalizedError, req, res, next);
+//   } else if (process.env.NODE_ENV === 'test') {
+//     sendErrorTest(normalizedError, req, res, next);
+//   }
+// };
